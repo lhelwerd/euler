@@ -1,16 +1,24 @@
 """
-PROBLEM:     000
+PROBLEM:     002
 AUTHOR:      Leon Helwerda
 STATUS:      {experimentation, in-progress, needs-optimization, done}
 INTERPRETER: Python 2 or 3
 EXPLANATION:
-    <explanation here>
+    Sum of all even Fibonacci terms below four million.
 """
 
 import timeit
 
 def problem():
-    pass
+    first = 1
+    second = 1
+    even_sum = 0
+    while second < 4e6:
+        first, second = second, first + second
+        if second % 2 == 0:
+            even_sum += second
+
+    print(even_sum)
 
 if __name__== "__main__":
     print(timeit.timeit("problem()", setup="from __main__ import problem",
