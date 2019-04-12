@@ -1,7 +1,7 @@
 """
 PROBLEM:     019
 AUTHOR:      Leon Helwerda
-STATUS:      {experimentation, in-progress, needs-optimization, done}
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Number of Sundays in the 20th century
@@ -26,6 +26,7 @@ def problem():
         if month == 2 and is_leap(year):
             wday += 1
         wday = wday % 7
+        # Only count Sundays at start of the months from 1901 onward
         sundays += year >= 1901 and wday == 0
 
         year = year + (month + 1) // 12
