@@ -13,7 +13,7 @@ from Euler import Sieve
 
 def problem():
     n = 600851475143
-    primes = Sieve(int(math.sqrt(n)))
+    primes = sorted(Sieve(int(math.sqrt(n))))
     for x in reversed(primes):
         if n % x == 0:
             print(x)
