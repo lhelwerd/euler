@@ -11,6 +11,7 @@ EXPLANATION:
 
 from builtins import range
 import timeit
+from Euler.divisor import proper_divisors
 
 def problem():
     amicable_sum = 0
@@ -19,12 +20,7 @@ def problem():
     n = 2
     while n < 10000:
         # Find divisors and add them up
-        divisors = set()
-        divisors.add(1)
-        for i in range(2, n // 2):
-            if n % i == 0:
-                divisors.add(i)
-                divisors.add(n // i)
+        divisors = proper_divisors(n)
 
         divisor_sum = sum(divisors)
         if divisor_sum in sums:
