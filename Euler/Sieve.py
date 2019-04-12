@@ -8,7 +8,7 @@ import os.path
 def Sieve(num):
     if os.path.exists('sieve.json'):
         with open('sieve.json', 'r') as sieve:
-            return json.load(sieve)
+            return set(json.load(sieve))
 
     nonprimes = set()
     primes = set()
@@ -24,4 +24,4 @@ def Sieve(num):
     with open('sieve.json', 'w') as sieve:
         json.dump(list(sorted(primes)), sieve)
 
-    return list(sorted(primes))
+    return primes
