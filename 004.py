@@ -1,21 +1,22 @@
 """
 PROBLEM:     004
 AUTHOR:      Leon Helwerda
-STATUS:      needs-optimization
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Largest palindrome of the product of two 3-digit numbers
 """
 
 import timeit
+from Euler.palindrome import is_palindrome
 
 def problem():
     largest = 0
-    for i in range(1000, 99, -1):
-        for j in range(1000, 99, -1):
-            if str(i * j) == ''.join(list(reversed(str(i * j)))):
-                if largest < i * j:
-                    largest = i * j
+    for i in range(999, 99, -1):
+        for j in range(999, 99, -1):
+            prod = i * j
+            if is_palindrome(str(prod)) and prod > largest:
+                largest = prod
 
     print(largest)
 
