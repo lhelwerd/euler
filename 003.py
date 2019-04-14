@@ -1,7 +1,7 @@
 """
 PROBLEM:     003
 AUTHOR:      Leon Helwerda
-STATUS:      needs-optimization
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Largest prime factor of a large number.

@@ -1,7 +1,7 @@
 """
 PROBLEM:     010
 AUTHOR:      Leon Helwerda
-STATUS:      needs-optimization
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Sum of primes below two million

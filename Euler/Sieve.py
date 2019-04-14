@@ -6,22 +6,11 @@ import json
 import os.path
 
 def Sieve(num):
-    if os.path.exists('sieve.json'):
-        with open('sieve.json', 'r') as sieve:
-            return set(json.load(sieve))
-
-    nonprimes = set()
-    primes = set()
-    for i in range(2, num):
-        if i not in nonprimes:
-            primes.add(i)
-            for j in range(i * 2, num, i):
-                nonprimes.add(j)
-        else:
-            # Save memory
-            nonprimes.remove(i)
-
-    with open('sieve.json', 'w') as sieve:
-        json.dump(list(sorted(primes)), sieve)
+    # All odd numbers are candidate primes
+    primes = set(range(3, num, 2))
+    primes.add(2)
+    for i in range(3, num, 2):
+        if i in primes:
+            primes.difference_update(range(i * 2, num, i))
 
     return primes
