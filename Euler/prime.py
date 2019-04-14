@@ -2,7 +2,6 @@
 
 from builtins import range
 from itertools import chain
-import os.path
 
 class PrimeSet(object):
     def __init__(self, limit, extendable=True):
