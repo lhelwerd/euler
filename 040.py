@@ -1,7 +1,7 @@
 """
 PROBLEM:     040
 AUTHOR:      Leon Helwerda
-STATUS:      {experimentation, in-progress, needs-optimization, done}
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Product of digits in Champernowne's constant
