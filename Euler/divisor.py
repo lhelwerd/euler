@@ -1,3 +1,5 @@
+from builtins import range
+
 def proper_divisors(n):
     # Find proper divisors of `n`
     divisors = set()

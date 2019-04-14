@@ -8,10 +8,10 @@ EXPLANATION:
 """
 
 import timeit
-from Euler import Sieve
+from Euler.prime import PrimeSet
 
 def problem():
-    primes = Sieve(int(2e6))
+    primes = PrimeSet(int(2e6))
     print(sum(primes))
 
 if __name__== "__main__":

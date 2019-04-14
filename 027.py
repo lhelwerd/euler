@@ -11,10 +11,10 @@ EXPLANATION:
 
 from builtins import range
 import timeit
-from Euler import Sieve
+from Euler.prime import PrimeSet
 
 def problem():
-    primes = Sieve(int(2e6))
+    primes = PrimeSet(int(2e6))
 
     best_coeff = 0
     best = 0

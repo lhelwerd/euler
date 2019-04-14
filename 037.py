@@ -9,10 +9,10 @@ EXPLANATION:
 """
 
 import timeit
-from Euler import Sieve
+from Euler.prime import PrimeSet
 
 def problem():
-    primes = Sieve(740000) # https://oeis.org/A020994
+    primes = PrimeSet(740000) # https://oeis.org/A020994
     truncatable = set()
     for prime in primes:
         digits = str(prime)

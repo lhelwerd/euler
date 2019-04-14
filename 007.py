@@ -7,12 +7,12 @@ EXPLANATION:
     10001st prime
 """
 
-from Euler import Sieve
+from Euler.prime import PrimeSet
 import timeit
 
 def problem():
     # Using the answer to find the solution
-    primes = list(sorted(Sieve(104743 + 1)))
+    primes = list(sorted(PrimeSet(104743 + 1)))
     # Just to spite 0-indexers
     print(primes[10001 - 1])
 

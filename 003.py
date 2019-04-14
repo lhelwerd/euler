@@ -9,11 +9,11 @@ EXPLANATION:
 
 import math
 import timeit
-from Euler import Sieve
+from Euler.prime import PrimeSet
 
 def problem():
     n = 600851475143
-    primes = sorted(Sieve(int(math.sqrt(n))))
+    primes = sorted(PrimeSet(int(math.sqrt(n))))
     for x in reversed(primes):
         if n % x == 0:
             print(x)

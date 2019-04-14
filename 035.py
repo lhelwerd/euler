@@ -9,10 +9,10 @@ EXPLANATION:
 
 from itertools import permutations
 import timeit
-from Euler import Sieve
+from Euler.prime import PrimeSet
 
 def problem():
-    primes = Sieve(int(1e6))
+    primes = PrimeSet(int(1e6))
     circular = set()
     for prime in primes:
         digits = str(prime)
