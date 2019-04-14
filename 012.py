@@ -8,39 +8,28 @@ EXPLANATION:
 """
 
 import timeit
+from Euler.prime import PrimeSet
 
 def problem():
+    primes = PrimeSet(10**4)
     triangle = 0
     i = 1
     divisors = 0
     while divisors < 500:
         triangle += i
         divisors = 1
-        n = triangle
-        j = 2
-        factor = 0
 
         # Perform a prime factorization and calculate the number of divisors 
         # according to https://math.stackexchange.com/a/1853205:
         # if n = p1^e1 * p2^e2 * ... * pr^er then the number of divisors is
         # (e1 + 1) * (e2 + 1) * ... * (er + 1).
-        while j * j <= n:
-            if n % j == 0:
-                factor += 1
-                n //= j
-            else:
-                if factor != 0:
-                    divisors *= factor + 1
-                    factor = 0
-                j += 1
-
-        divisors *= factor + 1
-        if n > 1 and n % j != 0:
-            divisors *= 2
+        factors = primes.factorize(triangle)
+        for factor in factors.itervalues():
+            divisors *= factor + 1
 
         i += 1
 
-    print("{} has {} divisors".format(triangle, divisors))
+    print(triangle)
 
 
 if __name__== "__main__":

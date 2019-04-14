@@ -1,5 +1,5 @@
 """
-PROBLEM:     047
+PROBLEM:     046
 AUTHOR:      Leon Helwerda
 STATUS:      done
 INTERPRETER: Python 2 or 3
