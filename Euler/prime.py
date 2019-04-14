@@ -52,3 +52,26 @@ class PrimeSet(object):
                 return False
 
         return True
+
+    def factorize(self, n):
+        p = iter(self)
+        j = next(p)
+        factors = {}
+        factor = 0
+
+        while j * j <= n:
+            if n % j == 0:
+                factor += 1
+                n //= j
+            else:
+                if factor != 0:
+                    factors[j] = factor
+                    factor = 0
+                j = next(p)
+
+        if factor != 0:
+            factors[j] = factor
+        if n > 1 and n % j != 0:
+            factors[n] = 1
+
+        return factors
