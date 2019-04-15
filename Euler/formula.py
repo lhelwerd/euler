@@ -2,12 +2,13 @@
 
 import numpy as np
 from builtins import range
+from sortedcontainers import SortedSet
 
 class FormulaSet(object):
     def __init__(self, formula, index, limit, extendable=True):
         self.formula = formula
         self.index = index
-        self.numbers = set()
+        self.numbers = SortedSet()
         self.start = 1
         self.limit = 1
         self.maximum = 0
@@ -16,6 +17,15 @@ class FormulaSet(object):
 
     def __iter__(self):
         return iter(self.numbers)
+
+    def __reversed__(self):
+        return reversed(self.numbers)
+
+    def __getitem__(self, n):
+        if n > self.limit:
+            self.extend(n)
+
+        return self.numbers[n]
 
     def extend(self, limit):
         if limit <= self.start:

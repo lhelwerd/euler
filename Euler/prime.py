@@ -2,10 +2,11 @@
 
 from builtins import range
 from itertools import chain
+from sortedcontainers import SortedSet
 
 class PrimeSet(object):
     def __init__(self, limit, extendable=True):
-        self.primes = set([2])
+        self.primes = SortedSet([2])
         self.start = 3
         self.limit = 3
         self.extendable = extendable
@@ -13,6 +14,9 @@ class PrimeSet(object):
 
     def __iter__(self):
         return iter(self.primes)
+
+    def __reversed__(self):
+        return reversed(self.primes)
 
     @staticmethod
     def odd_range(start, limit):
