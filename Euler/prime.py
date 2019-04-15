@@ -1,7 +1,8 @@
 # Finding prime numbers using the Sieve of Eratosthenes
 
-from builtins import range
+import random
 from itertools import chain
+from past.builtins import xrange as range
 from sortedcontainers import SortedSet
 
 class PrimeSet(object):
@@ -16,7 +17,10 @@ class PrimeSet(object):
         return iter(self.primes)
 
     def __reversed__(self):
-        return reversed(self.primes)
+        if self.ordered:
+            return reversed(self.primes)
+
+        raise TypeError
 
     @staticmethod
     def odd_range(start, limit):
@@ -42,20 +46,53 @@ class PrimeSet(object):
                 self.primes.difference_update(range(i * 2, self.limit + 1, i))
 
     def __contains__(self, num):
-        if num <= self.limit:
-            return num in self.primes
-        if num <= self.limit * 10 and self.extendable:
+        p = num in self.primes
+        if p or num <= self.limit:
+            return p
+        if self.extendable and num <= self.limit * 10:
             self.extend(self.limit * 10)
             return num in self.primes
 
         # Find if there are any proper divisors of n (excluding 1 and n) by
         # only using the prime numbers we know and any odd numbers over it that 
         # may be a divisor as well (up to n/2).
-        for i in chain(self.primes, self.odd_range(self.limit, num)):
+        for i in chain(self.primes, self.odd_range(self.limit, num // 2)):
             if num % i == 0:
                 return False
 
+        self.primes.add(num)
         return True
+
+    def miller_test(self, n, k):
+        # Proper value of k is dependent on the upper bound of n:
+        # https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test#Testing_against_small_sets_of_bases
+        r = 0
+        d = n - 1
+        while d % 2 == 0:
+            d //= 2
+            r += 1
+
+        # So n = 2^r * d + 1
+        for i in range(k):
+            # Calculate a ^ d mod n
+            x = pow(self.primes[i], d, n)
+            if x == 1 or x == n - 1:
+                continue
+
+            for j in range(r - 1):
+                x = pow(x, 2, n)
+                if x == n - 1:
+                    break
+            else:
+                # Composite
+                return False
+
+        # For "low" values of n: prime
+        return True
+
+    def refresh_limit(self):
+        # Consider the set of primes to be complete up to the maximum.
+        self.limit = max(self.primes)
 
     def factorize(self, n):
         p = iter(self)
