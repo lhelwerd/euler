@@ -1,7 +1,7 @@
 """
 PROBLEM:     054
 AUTHOR:      Leon Helwerda
-STATUS:      {experimentation, in-progress, needs-optimization, done}
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Number of Poker hands won by Player 1
