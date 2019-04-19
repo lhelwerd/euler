@@ -22,6 +22,12 @@ class PrimeSet(object):
 
         raise TypeError
 
+    def __len__(self):
+        return len(self.primes)
+
+    def __getitem__(self, index):
+        return self.primes[index]
+
     @staticmethod
     def odd_range(start, limit):
         return range(2 * (start // 2) + 1, limit, 2)
