@@ -20,7 +20,7 @@ def test_key(key, number):
         j = number.find(d, i)
         if j == -1:
             return False
-        i = j 
+        i = j + 1 
 
     return True
 
