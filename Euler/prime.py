@@ -122,3 +122,16 @@ class PrimeSet(object):
             factors[n] = 1
 
         return factors
+
+    def totient(self, d, phis):
+        if d in self.primes:
+            phi = d - 1
+        elif d % 2 == 0:
+            phi = 2 * phis[d // 2] if d // 2 % 2 == 0 else phis[d // 2]
+        else:
+            phi = d
+            for p in self.factorize(d):
+                phi *= 1 - 1 / float(p)
+
+        phis.append(phi)
+        return phi
