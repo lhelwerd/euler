@@ -9,7 +9,6 @@ EXPLANATION:
 """
 
 from past.builtins import xrange as range
-import math
 import timeit
 
 def problem():
