@@ -33,7 +33,7 @@ def problem():
         else:
             divisors.append(set(primes.factorize(d).keys()))
 
-        for n in range(ceil((d * best_num) / float(best_den)), (d * 3) // 7):
+        for n in range(int(ceil((d * best_num) / float(best_den))), (d * 3) // 7):
             if n * best_den > best_num * d and divisors[n].isdisjoint(divisors[d]):
                 best_num = n
                 best_den = d

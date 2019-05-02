@@ -4,7 +4,7 @@ AUTHOR:      Leon Helwerda
 STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
-    Number of reduced proper fraction with denominator below one million.
+    Number of reduced proper fraction with denominator at most one million.
 """
 
 from past.builtins import xrange as range
