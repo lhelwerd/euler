@@ -1,4 +1,4 @@
-from builtins import range
+from past.builtins import xrange as range
 
 def proper_divisors(n, add=1):
     # Find proper divisors of `n`
