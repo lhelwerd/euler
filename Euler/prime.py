@@ -1,7 +1,7 @@
 # Finding prime numbers using the Sieve of Eratosthenes
 
 import random
-from itertools import chain
+from itertools import chain, product
 from past.builtins import xrange as range
 from sortedcontainers import SortedSet
 
@@ -134,6 +134,21 @@ class PrimeSet(object):
             factors[n] = 1
 
         return factors
+
+    def proper_divisors(self, n):
+        # https://rosettacode.org/wiki/Proper_divisors#Python:_From_prime_factors
+        factors = self.factorize(n)
+        counts = factors.values()
+        multiplicities = product(*(range(count + 1) for count in counts))
+        divisors = set()
+        for multiplicity in multiplicities:
+            d = 1
+            for factor, m in zip(factors, multiplicity):
+                d *= factor ** m
+            if d != n:
+                divisors.add(d)
+
+        return divisors
 
     def totient(self, d, phis):
         if d % 2 == 0:
