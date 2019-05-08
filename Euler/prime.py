@@ -18,10 +18,7 @@ class PrimeSet(object):
         return iter(self.primes)
 
     def __reversed__(self):
-        if self.ordered:
-            return reversed(self.primes)
-
-        raise TypeError
+        return reversed(self.primes)
 
     def __len__(self):
         return len(self.primes)
