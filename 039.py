@@ -13,15 +13,16 @@ import math
 import timeit
 
 def problem():
-    solutions = [0] * 1001
-    for a in range(1, 1000):
+    limit = 1000
+    solutions = [0] * (limit + 1)
+    for a in range(1, limit // 3):
         # a + b + c <= 1000
         # b >= a to avoid symmetry
         # c = sqrt(a**2 + b**2) >= sqrt(a**2 + a**2) = sqrt(2) * a
-        for b in range(a, 1000 - a - math.sqrt(2) * a):
+        for b in range(a, limit - a - math.sqrt(2) * a):
             c = math.sqrt(a**2 + b**2)
             p = a + b + c
-            if p == int(p) and p <= 1000:
+            if p == int(p) and p <= limit:
                 solutions[int(p)] += 1
 
     print(solutions.index(max(solutions)))
