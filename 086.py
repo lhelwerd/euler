@@ -7,9 +7,7 @@ EXPLANATION:
     Spider and fly problem
 """
 
-from past.builtins import xrange as range
 import timeit
-import math
 import numpy as np
 
 matrices = [
@@ -36,9 +34,8 @@ def problem():
                 found = False
                 for j, k in enumerate(ok):
                     if k and triple[abs(j-1)] * mult == M:
-                        # How many possible solutions are encoded in 
-                        # triple[0],
-                        # excluding rotations (so a <= b)?
+                        # How many possible solutions are encoded in triple[j],
+                        # (w + h), excluding rotations (so a <= b)?
                         if triple[j] * mult < M:
                             sol += triple[j] * mult // 2
                         else:
@@ -53,7 +50,9 @@ def problem():
                 else:
                     i += 1
 
+                # Limit growth of non-primitive pythagorean triples
                 if triple[0] * mult == M or triple[1] * mult == M:
+                    # Ensure we haven't seen this triple already
                     s = tuple(triple * (mult + 1))
                     if s not in seen:
                         triples.append((triple, mult + 1))
@@ -61,10 +60,11 @@ def problem():
             else:
                 i += 1
 
-        # Expand primitives
+        # Expand primitive pythagorean triples
         primitives = []
         for primitive in expand:
-            if min(primitive[0], primitive[1]) == M: # Limit growth
+            # Limit growth of primitives
+            if min(primitive[0], primitive[1]) == M:
                 for matrix in matrices:
                     expanded = np.matmul(matrix, primitive)
                     triples.append((expanded, 1))
@@ -77,7 +77,5 @@ def problem():
     print(M)
 
 if __name__ == "__main__":
-    #from cProfile import run
-    #run("problem()")
     print(timeit.timeit("problem()", setup="from __main__ import problem",
                         number=1))
