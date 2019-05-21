@@ -127,8 +127,9 @@ class PrimeSet(object):
 
         if factor != 0:
             factors[j] = factor
-        if n > 1 and n % j != 0:
-            factors[n] = 1
+        if n > 1:
+            factors.setdefault(n, 0)
+            factors[n] += 1
 
         return factors
 
