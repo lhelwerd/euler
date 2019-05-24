@@ -18,6 +18,9 @@ class FormulaSet(object):
     def __iter__(self):
         return iter(self.numbers)
 
+    def __len__(self):
+        return len(self.numbers)
+
     def __reversed__(self):
         return reversed(self.numbers)
 

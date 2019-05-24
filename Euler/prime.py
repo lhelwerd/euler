@@ -30,24 +30,24 @@ class PrimeSet(object):
     def odd_range(start, limit):
         return range(2 * (start // 2) + 1, limit, 2)
 
+    def range(self, start, limit, reverse=False):
+        return self.primes.irange(start, limit, reverse=reverse)
+
     def extend(self, limit):
-        if limit <= self.start:
+        if limit < self.start:
             return
 
-        self.start = self.limit
+        maxbase = int(limit**0.5) + 1
+        self.extend(maxbase)
         self.limit = limit
         # All odd numbers are candidate primes
-        self.primes.update(self.odd_range(self.start, self.limit))
+        self.start = self.primes[-1] + 1
+        self.primes.update(self.odd_range(self.start, self.limit + 1))
 
         # Remove non-primes based on earlier found numbers
-        for p in self.odd_range(3, self.start):
-            if p in self.primes:
-                start_p = self.start + p - (self.start % p)
-                self.primes.difference_update(range(start_p, self.limit + 1, p))
-
-        for i in range(self.start, self.limit, 2):
-            if i in self.primes:
-                self.primes.difference_update(range(i * 2, self.limit + 1, i))
+        for p in self.range(3, maxbase):
+            start_p = self.start + p - (self.start % p)
+            self.primes.difference_update(range(start_p, self.limit + 1, p))
 
     def __contains__(self, num):
         if self.extendable or num <= self.limit:
