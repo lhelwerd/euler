@@ -1,7 +1,7 @@
 """
 PROBLEM:     111
 AUTHOR:      Leon Helwerda
-STATUS:      {experimentation, in-progress, needs-optimization, done}
+STATUS:      done
 INTERPRETER: Python 2 or 3
 EXPLANATION:
     Sum of 10-digit prime numbers where a digit is repeated maximally
