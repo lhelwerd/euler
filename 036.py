@@ -8,8 +8,6 @@ EXPLANATION:
     and in base 2.
 """
 
-from builtins import range
-import math
 import timeit
 from Euler.palindrome import generate, is_palindrome
 
