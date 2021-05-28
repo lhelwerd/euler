@@ -1,6 +1,7 @@
 # Finding prime numbers using the Sieve of Eratosthenes
 
 import random
+from collections import deque
 from itertools import chain, product
 from past.builtins import xrange as range
 from sortedcontainers import SortedSet
@@ -167,3 +168,29 @@ class PrimeSet(object):
 
         phis.append(phi)
         return phi
+
+class CoprimeSet(object):
+    def __init__(self, limit):
+        self.limit = limit
+        self.children = [(2, 1), (3, 1)]
+        self.candidates = deque(self.children)
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        while not self.children:
+            if not self.candidates:
+                raise StopIteration
+
+            c = self.candidates.popleft()
+            if 2 * c[0] - c[1] + c[0] <= self.limit:
+                self.children.append((2 * c[0] - c[1], c[0]))
+            if 2 * c[0] + c[1] + c[0] <= self.limit:
+                self.children.append((2 * c[0] + c[1], c[0]))
+            if c[0] + 2 * c[1] + c[1] <= self.limit:
+                self.children.append((c[0] + 2 * c[1], c[1]))
+
+            self.candidates.extend(self.children)
+
+        return self.children.pop(0)
