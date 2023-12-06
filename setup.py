@@ -20,6 +20,8 @@ setup(name='Euler',
       author_email='l.s.helwerda@liacs.leidenuniv.nl',
       license='MIT',
       packages=find_packages(),
+      package_data={'Euler': ['py.typed']},
+      include_package_data=True,
       classifiers=[
           'Development Status :: 3 - Alpha',
           'License :: OSI Approved :: MIT License',
