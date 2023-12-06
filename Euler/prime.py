@@ -30,9 +30,9 @@ class PrimeSet:
         return len(self.primes)
 
     @overload
-    def __getitem__(self, item: slice) -> Sequence[int]: ...
+    def __getitem__(self, item: slice) -> Sequence[int]: ... # pragma: no cover
     @overload
-    def __getitem__(self, item: int) -> int: ...
+    def __getitem__(self, item: int) -> int: ... # pragma: no cover
     def __getitem__(self, item):
         return self.primes[item]
 
@@ -200,8 +200,7 @@ class PrimeSet:
             else:
                 phi = phis[number // 2]
         else:
-            step = 0
-            for prime in self.primes:
+            for step, prime in enumerate(self.primes):
                 if number % prime == 0:
                     factor = number // prime
                     phi = phis[factor] * (
@@ -210,11 +209,11 @@ class PrimeSet:
                     )
                     break
 
-                if step == self.miller * 2 and number in self:
+                if self.miller and step == self.miller * 2 and number in self:
                     phi = number - 1
                     break
-
-                step += 1
+            else:
+                raise ValueError('Exhausted primes')
 
         phis.append(phi)
         return phi

@@ -140,7 +140,15 @@ class PrimeTest(unittest.TestCase):
         self.assertEqual(self.prime.totient(7, phis), 6)
         self.assertEqual(self.prime.totient(8, phis), 4)
         self.assertEqual(self.prime.totient(9, phis), 6)
-        self.assertEqual(phis, [0, 1, 1, 2, 2, 4, 2, 6, 4, 6])
+        self.assertEqual(self.prime.totient(10, phis), 4)
+        self.assertEqual(phis, [0, 1, 1, 2, 2, 4, 2, 6, 4, 6, 4])
+
+        limited = PrimeSet(0, extendable=False)
+        with self.assertRaises(ValueError):
+            limited.totient(11, phis)
+
+        miller = PrimeSet(10, extendable=False, miller=1)
+        self.assertEqual(miller.totient(11, phis), 10)
 
 class CoprimeTest(unittest.TestCase):
     """

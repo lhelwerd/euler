@@ -7,7 +7,8 @@ import numpy as np
 from numpy.typing import NDArray
 from sortedcontainers import SortedSet
 
-class Formula(Protocol): # pylint: disable=too-few-public-methods
+class Formula(Protocol): # pragma: no cover
+    # pylint: disable=too-few-public-methods
     """
     Type specification for formula function.
     """
@@ -44,9 +45,9 @@ class FormulaSet:
         return reversed(self.numbers)
 
     @overload
-    def __getitem__(self, item: slice) -> Sequence[float]: ...
+    def __getitem__(self, item: slice) -> Sequence[float]: ... # pragma: no cover
     @overload
-    def __getitem__(self, item: int) -> float: ...
+    def __getitem__(self, item: int) -> float: ... # pragma: no cover
     def __getitem__(self, item):
         if not isinstance(item, slice) and item >= self.limit:
             self.extend(item + 1)
