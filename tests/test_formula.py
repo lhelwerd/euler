@@ -44,6 +44,18 @@ class FormulaTest(unittest.TestCase):
         self.assertEqual(self.formula[5], 7)
         self.assertEqual(self.formula[10], 12)
 
+    def test_extend(self) -> None:
+        """
+        Test the formula set extension.
+        """
+
+        # Same length causes no change
+        self.formula.extend(3)
+        self.assertEqual(len(self.formula), 5)
+
+        self.formula.extend(10)
+        self.assertEqual(len(self.formula), 10)
+
     def test_contains(self) -> None:
         """
         Test the formula set contains number check.
@@ -53,3 +65,8 @@ class FormulaTest(unittest.TestCase):
         self.assertNotIn(1, self.formula)
         self.assertIn(7.0, self.formula)
         self.assertIn(12, self.formula)
+
+        index = FormulaSet(lambda n: n * 2.0, lambda num: num / 2, 5)
+        self.assertIn(4.0, index)
+        self.assertIn(16.0, index)
+        self.assertNotIn(17.0, index)

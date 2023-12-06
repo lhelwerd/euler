@@ -44,11 +44,9 @@ class FormulaSet:
         return reversed(self.numbers)
 
     @overload
-    def __getitem__(self, item: slice) -> Sequence[float]:
-        ...
+    def __getitem__(self, item: slice) -> Sequence[float]: ...
     @overload
-    def __getitem__(self, item: int) -> float:
-        ...
+    def __getitem__(self, item: int) -> float: ...
     def __getitem__(self, item):
         if not isinstance(item, slice) and item >= self.limit:
             self.extend(item + 1)
@@ -60,7 +58,7 @@ class FormulaSet:
         Increase the sequence of generated numbers to go up to `limit` numbers.
         """
 
-        if limit <= self.start:
+        if limit <= self.limit:
             return
 
         self.start = self.limit

@@ -23,3 +23,5 @@ class ContinuedFractionTest(unittest.TestCase):
             (Decimal('3'), Decimal('7')),
             (Decimal('4'), Decimal('1'))
         ])
+
+        self.assertEqual(list(expand_sqrt(4)), [])

@@ -19,3 +19,5 @@ class SpecialSubsetSumTest(unittest.TestCase):
         self.assertTrue(special_subset_sum_set((1, 2)))
         self.assertTrue(special_subset_sum_set({2, 3, 4}))
         self.assertTrue(special_subset_sum_set({6, 9, 11, 12, 13}))
+        self.assertFalse(special_subset_sum_set({1, 2, 3}))
+        self.assertFalse(special_subset_sum_set({1, 2, 8}))

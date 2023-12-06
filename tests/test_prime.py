@@ -69,6 +69,8 @@ class PrimeTest(unittest.TestCase):
         self.assertNotIn(4, self.prime)
         self.assertIn(23, self.prime)
         self.assertNotIn(25, self.prime)
+        # Extendable, but far away from current limit, so divisor test
+        self.assertNotIn(10000, self.prime)
 
         # Miller test
         miller = PrimeSet(10, extendable=False, miller=2)
@@ -87,6 +89,8 @@ class PrimeTest(unittest.TestCase):
 
         self.assertTrue(self.prime.miller_test(67, 2))
         self.assertFalse(self.prime.miller_test(68, 2))
+        self.assertFalse(self.prime.miller_test(69, 2))
+        self.assertTrue(self.prime.miller_test(73, 2))
 
     def test_refresh_limit(self) -> None:
         """
@@ -111,6 +115,7 @@ class PrimeTest(unittest.TestCase):
         self.assertEqual(self.prime.factorize(8), {2: 3})
         self.assertEqual(self.prime.factorize(14), {2: 1, 7: 1})
         self.assertEqual(self.prime.factorize(5), {5: 1})
+        self.assertEqual(self.prime.factorize(1), {})
 
     def test_proper_divisors(self) -> None:
         """
@@ -131,6 +136,11 @@ class PrimeTest(unittest.TestCase):
         self.assertEqual(self.prime.totient(3, phis), 2)
         self.assertEqual(self.prime.totient(4, phis), 2)
         self.assertEqual(self.prime.totient(5, phis), 4)
+        self.assertEqual(self.prime.totient(6, phis), 2)
+        self.assertEqual(self.prime.totient(7, phis), 6)
+        self.assertEqual(self.prime.totient(8, phis), 4)
+        self.assertEqual(self.prime.totient(9, phis), 6)
+        self.assertEqual(phis, [0, 1, 1, 2, 2, 4, 2, 6, 4, 6])
 
 class CoprimeTest(unittest.TestCase):
     """
@@ -146,6 +156,10 @@ class CoprimeTest(unittest.TestCase):
         """
 
         self.assertEqual(list(self.coprime), [(2, 1), (3, 1), (3, 2), (4, 1)])
+        longer = CoprimeSet(7)
+        self.assertEqual(list(longer), [
+            (2, 1), (3, 1), (3, 2), (5, 2), (4, 1), (5, 1), (4, 3), (6, 1)
+        ])
 
     def test_next(self) -> None:
         """

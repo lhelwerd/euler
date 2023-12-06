@@ -30,11 +30,9 @@ class PrimeSet:
         return len(self.primes)
 
     @overload
-    def __getitem__(self, item: slice) -> Sequence[int]:
-        ...
+    def __getitem__(self, item: slice) -> Sequence[int]: ...
     @overload
-    def __getitem__(self, item: int) -> int:
-        ...
+    def __getitem__(self, item: int) -> int: ...
     def __getitem__(self, item):
         return self.primes[item]
 
