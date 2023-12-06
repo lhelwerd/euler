@@ -5,7 +5,7 @@ Text file reading.
 from os import PathLike
 from typing import Callable, List, Union
 
-def read(filename: Union[str, PathLike[str]],
+def read(filename: Union[str, PathLike],
          reducer: Callable[[List[str], str], None] = \
                  lambda result, word: result.append(word)) -> List[str]:
     """
