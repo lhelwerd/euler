@@ -1,15 +1,20 @@
 # Euler
 
+[![coverage](https://github.com/lhelwerd/euler/actions/workflows/coverage.yml/badge.svg)](https://github.com/lhelwerd/euler/actions/workflows/coverage.yml)
+[![Coverage Status](https://coveralls.io/repos/github/lhelwerd/euler/badge.svg?branch=main)](https://coveralls.io/github/lhelwerd/euler?branch=main)
+
 This repository contains some Python modules that implement algorithms for 
 number theory and other fields of mathematics, but also some file processing 
 methods. Potential applications that these modules could be used for are 
 [Project Euler](https://projecteuler.net/) problems and [Advent of 
 Code](https://adventofcode.com/) puzzles.
 
-The modules are written for Python 3.8+. Support for older versions is dropped 
-in version 0.0.2. The oldest versions of the modules support running on older 
-versions as well, which are from back when [PyPy](https://www.pypy.org/) was 
-only starting to support Python 3 code.
+The modules are written for Python 3.8+ and for PyPy 3.10+. Support for older 
+versions is dropped in version 0.0.2. The oldest versions of the modules 
+support running on older versions as well, which are from back when 
+[PyPy](https://www.pypy.org/) was only starting to support Python 3 code. 
+Detailed information on changes for each version is found in the 
+[RELEASE_NOTES.md](release notes) file.
 
 ## Installation
 
@@ -43,5 +48,5 @@ Style checks are done by installing with `pip install pylint` and then using
 
 ## License
 
-The Euler module is licensed under the MIT License. See the [LICENSE](LICENSE) 
+The Euler module is licensed under the MIT License. See the [LICENSE](license) 
 file for more information.
