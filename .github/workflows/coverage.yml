@@ -19,7 +19,7 @@ jobs:
       - run: pip install -r requirements.txt
       - run: pip install coverage coveralls
       - run: coverage run -m unittest discover -s tests
-	  - run: coverage report
+      - run: coverage report
       - run: coveralls
         if: "${{ success() }}"
         env:
@@ -29,4 +29,4 @@ jobs:
         python:
         - '3.8.17'
         - '3.12.0'
-		- 'pypy3.10'
+        - 'pypy3.10'
