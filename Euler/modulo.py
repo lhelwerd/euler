@@ -1,22 +1,29 @@
-# Helper functions for modular arithmetic
+"""
+Module for modular arithmetic.
+"""
 
-def inverse(a, n):
-    # Calculate the multiplicative modular inverse t of a, modulo n
-    # So at = 1 mod n
-    # https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Modular_integers
-    t = 0
-    t1 = 1
-    r = n
-    r1 = a
+def inverse(value: int, modulo: int) -> int:
+    """
+    Calculate the multiplicative modular inverse `t` of value `a`, modulo `n`.
+    So `a * t = 1 mod n`
 
-    while r1 != 0:
-        q = r // r1
-        t, t1 = t1, t - q * t1
-        r, r1 = r1, r - q * r1
+    https://en.wikipedia.org/wiki/Extended_Euclidean_algorithm#Modular_integers
+    """
 
-    if r > 1:
+    inverse_t = 0
+    new_inverse = 1
+    remainder = modulo
+    new_remainder = value
+
+    while new_remainder != 0:
+        quotient = remainder // new_remainder
+        inverse_t, new_inverse = new_inverse, inverse_t - quotient * new_inverse
+        remainder, new_remainder = new_remainder, \
+            remainder - quotient * new_remainder
+
+    if remainder > 1:
         return 0
-    if t < 0:
-        t += n
+    if inverse_t < 0:
+        inverse_t += modulo
 
-    return t
+    return inverse_t

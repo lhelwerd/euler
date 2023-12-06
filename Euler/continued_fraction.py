@@ -1,21 +1,28 @@
-from decimal import Decimal
+"""
+Module for calculations involving continued fractions.
+"""
 
-def expand_sqrt(n):
-    # Generate the unique parameters of the continued fraction expansion of
-    # the square root of `n`, stopping when an existing parameter is found.
-    s = Decimal(n).sqrt()
-    if s % 1 != 0:
-        x = s
-        f = int(s)
-        P = set()
-        # Numerator/denominator start values like sqrt(2) expansion #57
-        v = Decimal('0')
-        w = Decimal('1')
-        while (v, w) not in P:
+from decimal import Decimal
+from typing import Generator, Set, Tuple, Union
+
+def expand_sqrt(number: int) -> Generator[Tuple[Decimal, Decimal], None, None]:
+    """
+    Generate the unique parameters of the continued fraction expansion of
+    the square root of `number`, stopping when an existing parameter is found.
+    """
+
+    square_root = Decimal(number).sqrt()
+    if square_root % 1 != 0:
+        fraction: Union[int, Decimal] = int(square_root)
+        expansions: Set[Tuple[Decimal, Decimal]] = set()
+        # Numerator/denominator start values like sqrt(2) expansion
+        numerator = Decimal('0')
+        denominator = Decimal('1')
+        while (numerator, denominator) not in expansions:
             # Not yet found, so add to the known expansions
-            P.add((v, w))
-            if v != 0:
-                yield (v, w)
+            expansions.add((numerator, denominator))
+            if numerator != 0:
+                yield (numerator, denominator)
 
             # Calculate next expansion's paramters
             # First iteration: v0 = int(s), w0 = n - int(s)**2 (n = s**2)
@@ -24,6 +31,6 @@ def expand_sqrt(n):
             # w_i = int((n - v_i ** 2) / w_{i-1})
             #  --> e.g. for s = sqrt(23) we get
             #  v1 = int((4+4...)/7) * 7 - 4 = 3, w1 = (23 - 3**2) / 7 = 2
-            v = f * w - v
-            w = (n - v ** 2) // w
-            f = (v + s) // w
+            numerator = fraction * denominator - numerator
+            denominator = (number - numerator ** 2) // denominator
+            fraction = (numerator + square_root) // denominator

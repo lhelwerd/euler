@@ -1,8 +1,10 @@
-# Functions for converting Roman numerals
+"""
+Module for converting Roman numerals.
+"""
 
 from sortedcontainers import SortedDict
 
-values = {
+VALUES = {
     'I': 1,
     'V': 5,
     'X': 10,
@@ -12,7 +14,7 @@ values = {
     'M': 1000
 }
 
-minimals = SortedDict([
+MINIMALS = SortedDict([
     (1, ('I', 0)),
     (5, ('V', 1)),
     (10, ('X', 1)),
@@ -22,30 +24,39 @@ minimals = SortedDict([
     (1000, ('M', 100))
 ])
 
-def to_number(numeral):
+def to_number(numeral: str) -> int:
+    """
+    Convert a Roman `numeral` to its numeric representation.
+    """
+
     count = 0
     previous = 0
-    for d in numeral[::-1]:
-        if values[d] < previous:
-            count -= values[d]
+    for letter in numeral[::-1]:
+        if VALUES[letter] < previous:
+            count -= VALUES[letter]
         else:
-            count += values[d]
-            previous = values[d]
+            count += VALUES[letter]
+            previous = VALUES[letter]
 
     return count
 
-def to_roman(number):
-    v = list(reversed(minimals))
-    i = 0
+def to_roman(number: int) -> str:
+    """
+    Convert the `number` to Roman numeral representation.
+    """
+
+    values = list(reversed(MINIMALS))
+    index = 0
     numeral = ""
     while number > 0:
-        if number >= v[i]:
-            number -= v[i]
-            numeral += minimals[v[i]][0]
-        elif number >= v[i] - minimals[v[i]][1]:
-            number -= v[i] - minimals[v[i]][1]
-            numeral += minimals[minimals[v[i]][1]][0] + minimals[v[i]][0]
+        if number >= values[index]:
+            number -= values[index]
+            numeral += MINIMALS[values[index]][0]
+        elif number >= values[index] - MINIMALS[values[index]][1]:
+            number -= values[index] - MINIMALS[values[index]][1]
+            numeral += MINIMALS[MINIMALS[values[index]][1]][0] + \
+                MINIMALS[values[index]][0]
         else:
-            i += 1
+            index += 1
 
     return numeral

@@ -1,21 +1,26 @@
-from builtins import range
+"""
+Triangle file reading and operations.
+"""
 
-def path(filename):
-    # Read a triangle file and find the maximum path sum in it.
+def path(filename: str) -> int:
+    """
+    Read a triangle file and find the maximum path sum in it.
+    """
 
     triangle = []
-    M = []
-    with open(filename) as numbers:
+    paths = []
+    with open(filename, 'r', encoding='utf-8') as numbers:
         for line in numbers:
             cols = line.strip().split(' ')
             triangle.append([int(c) for c in cols])
-            M.append([0] * len(cols))
+            paths.append([0] * len(cols))
 
-    M[0][0] = triangle[0][0]
+    paths[0][0] = triangle[0][0]
 
     for row in range(1, len(triangle)):
-        M[row] = [triangle[row][i] + max(M[row-1][i-1] if i > 0 else 0,
-                                         M[row-1][i] if i < len(M[row-1]) else 0)
-                  for i in range(len(triangle[row]))]
+        end = len(paths[row-1])
+        paths[row] = [triangle[row][i] + max(paths[row-1][i-1] if i > 0 else 0,
+                                             paths[row-1][i] if i < end else 0)
+                      for i in range(len(triangle[row]))]
 
-    return max(M[row])
+    return max(paths[row])

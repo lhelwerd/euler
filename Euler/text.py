@@ -1,14 +1,25 @@
-# Text file reading
+"""
+Text file reading.
+"""
 
-def read(filename, reducer=lambda result, word: result.append(word)):
-    # Read the (potentially large) file efficiently through buffering and sort 
-    # the list while creating it.
-    result = []
+from typing import Callable, List
+
+def read(filename: str,
+         reducer: Callable[[List[str], str], None] = \
+                 lambda result, word: result.append(word)) -> List[str]:
+    """
+    Read the (potentially large) file containing words between double quotes.
+    The reading is kept more efficiently through buffering, while a `reducer`
+    is called to perform operations on the list while creating it, for example
+    for sorting.
+    """
+
+    result: List[str] = []
     word = ""
-    buffered = True
+    buffered = 'initial'
     in_word = False
 
-    with open(filename) as words:
+    with open(filename, 'r', encoding='utf-8') as words:
         while buffered:
             buffered = words.read(1024)
             j = 0
@@ -38,5 +49,5 @@ def read(filename, reducer=lambda result, word: result.append(word)):
 
             if j > 0:
                 word = buffered[j:]
-                
+
     return result

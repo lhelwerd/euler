@@ -24,8 +24,11 @@ setup(name='Euler',
           'Development Status :: 3 - Alpha',
           'License :: OSI Approved :: MIT License',
           'Programming Language :: Python',
-          'Programming Language :: Python :: 2.7',
-          'Programming Language :: Python :: 3.7',
+          'Programming Language :: Python :: 3.8',
+          'Programming Language :: Python :: 3.9',
+          'Programming Language :: Python :: 3.10',
+          'Programming Language :: Python :: 3.11',
+          'Programming Language :: Python :: 3.12',
           'Topic :: Scientific/Engineering :: Mathematics'
       ],
       keywords=[
@@ -33,5 +36,5 @@ setup(name='Euler',
           'divisors', 'palindromes', 'roman', 'triangles'
       ],
       install_requires=['numpy', 'sortedcontainers'],
-      python_requires='>=2.7'
+      python_requires='>=3.8'
 )

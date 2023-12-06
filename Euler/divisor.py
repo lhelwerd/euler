@@ -1,12 +1,19 @@
-from past.builtins import xrange as range
+"""
+Module for calculating divisors of numbers.
+"""
 
-def proper_divisors(n, add=1):
-    # Find proper divisors of `n`
+from typing import Set
+
+def proper_divisors(number: int, add: int = 1) -> Set[int]:
+    """
+    Find proper divisors of `number`. `add` indicates the unitary value to add.
+    """
+
     divisors = set()
     divisors.add(add)
-    for i in range(2, n // 2 + 1):
-        if n % i == 0:
-            divisors.add(i)
-            divisors.add(n // i)
+    for divisor in range(2, number // 2 + 1):
+        if number % divisor == 0:
+            divisors.add(divisor)
+            divisors.add(number // divisor)
 
     return divisors

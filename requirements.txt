@@ -1,4 +1,2 @@
-future
-num2words
-numpy<1.16
+numpy
 sortedcontainers

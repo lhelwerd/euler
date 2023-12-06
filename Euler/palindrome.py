@@ -1,10 +1,14 @@
-from builtins import range
-import math
+"""
+Module for palindromes.
+"""
 
-def generate(limit):
+import math
+from typing import Generator
+
+def generate(limit: int) -> Generator[int, None, None]:
     """
     Generator providing palindromes. Palindromes are not provided in any
-    specific order. Limit should be a power of ten.
+    specific order. `limit` should be a power of ten.
     """
 
     length = int(math.log10(limit))
@@ -18,9 +22,9 @@ def generate(limit):
         else:
             yield part
 
-def is_palindrome(digits):
+def is_palindrome(digits: str) -> bool:
     """
-    Check if the provided string of digits is a palindrome.
+    Check if the provided string `digits` is a palindrome.
     """
 
     return digits == digits[::-1]

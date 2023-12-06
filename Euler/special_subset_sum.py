@@ -3,23 +3,22 @@ Special subset sum set properties.
 """
 
 import itertools
+from typing import Collection
 
-def special_subset_sum_set(candidate):
+def special_subset_sum_set(candidate: Collection[int]) -> bool:
     """
     Test if a candidate set conforms to the special subset sum property.
     """
 
-    a = set(candidate)
-    for r in range(1, len(a) // 2 + 2):
-        for comb in itertools.combinations(a, r):
-            b = set(comb)
-            rest = a - b
-            for q in range(1, len(rest) + 1):
-                for comb2 in itertools.combinations(rest, q):
-                    c = set(comb2)
-                    if sum(b) == sum(c):
+    candidate = set(candidate)
+    for length in range(1, len(candidate) // 2 + 2):
+        for comb in itertools.combinations(candidate, length):
+            rest = candidate - set(comb)
+            for rest_length in range(1, len(rest) + 1):
+                for comb2 in itertools.combinations(rest, rest_length):
+                    if sum(comb) == sum(comb2):
                         return False
-                    if len(b) > len(c) and sum(b) < sum(c):
+                    if len(comb) > len(comb2) and sum(comb) < sum(comb2):
                         return False
 
     return True

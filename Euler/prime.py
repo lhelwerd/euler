@@ -1,13 +1,18 @@
-# Finding prime numbers using the Sieve of Eratosthenes
+"""
+Module for finding prime numbers using various algorithms.
+"""
 
-import random
 from collections import deque
 from itertools import chain, product
-from past.builtins import xrange as range
+from typing import overload, Dict, Iterator, List, Sequence, Set, Tuple
 from sortedcontainers import SortedSet
 
-class PrimeSet(object):
-    def __init__(self, limit, extendable=True, miller=0):
+class PrimeSet:
+    """
+    Collection of prime numbers that should have no proper divisors except 1.
+    """
+
+    def __init__(self, limit: int, extendable: bool = True, miller: int = 0):
         self.primes = SortedSet([2])
         self.start = 3
         self.limit = 3
@@ -15,26 +20,40 @@ class PrimeSet(object):
         self.miller = miller
         self.extend(limit)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[int]:
         return iter(self.primes)
 
-    def __reversed__(self):
+    def __reversed__(self) -> Iterator[int]:
         return reversed(self.primes)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.primes)
 
-    def __getitem__(self, index):
-        return self.primes[index]
+    @overload
+    def __getitem__(self, item: slice) -> Sequence[int]:
+        ...
+    @overload
+    def __getitem__(self, item: int) -> int:
+        ...
+    def __getitem__(self, item):
+        return self.primes[item]
 
     @staticmethod
-    def odd_range(start, limit):
+    def _odd_range(start: int, limit: int) -> 'range':
         return range(2 * (start // 2) + 1, limit, 2)
 
-    def range(self, start, limit, reverse=False):
+    def range(self, start: int, limit: int, reverse: bool = False) \
+            -> Iterator[int]:
+        """
+        Retrieve a range of known prime numbers.
+        """
         return self.primes.irange(start, limit, reverse=reverse)
 
-    def extend(self, limit):
+    def extend(self, limit: int) -> None:
+        """
+        Increase the sequence of generated primes to go up to `limit` numbers.
+        """
+
         if limit < self.start:
             return
 
@@ -43,61 +62,68 @@ class PrimeSet(object):
         self.limit = limit
         # All odd numbers are candidate primes
         self.start = self.primes[-1] + 1
-        self.primes.update(self.odd_range(self.start, self.limit + 1))
+        self.primes.update(self._odd_range(self.start, self.limit + 1))
 
         # Remove non-primes based on earlier found numbers
-        for p in self.range(3, maxbase):
-            start_p = self.start + p - (self.start % p)
-            self.primes.difference_update(range(start_p, self.limit + 1, p))
+        for prime in self.range(3, maxbase):
+            start_prime = self.start + prime - (self.start % prime)
+            self.primes.difference_update(range(start_prime, self.limit + 1,
+                                                prime))
 
-    def __contains__(self, num):
-        if self.extendable or num <= self.limit:
-            p = num in self.primes
-            if p or num <= self.limit:
-                return p
+    def __contains__(self, number: int) -> bool:
+        if self.extendable or number <= self.limit:
+            is_prime = number in self.primes
+            if is_prime or number <= self.limit:
+                return is_prime
 
-            if self.extendable and num <= self.limit * 10:
+            if self.extendable and number <= self.limit * 10:
                 self.extend(self.limit * 10)
-                return num in self.primes
+                return number in self.primes
 
         if self.miller:
-            prime = self.miller_test(num, self.miller)
-            if prime:
-                self.primes.add(num)
+            is_prime = self.miller_test(number, self.miller)
+            if is_prime:
+                self.primes.add(number)
 
-            return prime
+            return is_prime
 
         # Find if there are any proper divisors of n (excluding 1 and n) by
-        # only using the prime numbers we know and any odd numbers over it that 
+        # only using the prime numbers we know and any odd numbers over it that
         # may be a divisor as well (up to n/2).
-        for i in chain(self.primes, self.odd_range(self.limit, num // 2)):
-            if num % i == 0:
+        for divisor in chain(self.primes,
+                             self._odd_range(self.limit, number // 2)):
+            if number % divisor == 0:
                 return False
 
-        self.primes.add(num)
+        self.primes.add(number)
         return True
 
-    def miller_test(self, n, k):
-        # Proper value of k is dependent on the upper bound of n:
-        # https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test#Testing_against_small_sets_of_bases
-        p = iter(self.primes)
-        r = 0
-        d = n - 1
-        while d % 2 == 0:
-            d //= 2
-            r += 1
+    def miller_test(self, number: int, base: int) -> bool:
+        """
+        Perform the Miller test on number `n` with base `k`.
+
+        Proper value of `k` is dependent on the upper bound of `n`:
+        https://en.wikipedia.org/wiki/Miller%E2%80%93Rabin_primality_test#Testing_against_small_sets_of_bases
+        """
+
+        primes = iter(self.primes)
+        power = 0
+        odd = number - 1
+        while odd % 2 == 0:
+            odd //= 2
+            power += 1
 
         # So n = 2^r * d + 1
-        for i in range(k):
-            a = next(p)
+        for _ in range(base):
+            prime = next(primes)
             # Calculate a ^ d mod n
-            x = pow(a, d, n)
-            if x == 1 or x == n - 1:
+            poly = pow(prime, odd, number)
+            if poly in (1, number - 1):
                 continue
 
-            for j in range(r - 1):
-                x = pow(x, 2, n)
-                if x == n - 1:
+            for _ in range(power - 1):
+                poly = pow(poly, 2, number)
+                if poly == number - 1:
                     break
             else:
                 # Composite
@@ -106,90 +132,121 @@ class PrimeSet(object):
         # For "low" values of n: prime
         return True
 
-    def refresh_limit(self):
-        # Consider the set of primes to be complete up to the maximum.
+    def refresh_limit(self) -> None:
+        """
+        Consider the set of primes to be complete up to the maximum number.
+        """
+
         self.limit = max(self.primes)
 
-    def factorize(self, n):
-        p = iter(self.primes)
-        j = next(p)
+    def factorize(self, number: int) -> Dict[int, int]:
+        """
+        Factorize the number `n` into a dictionary of prime numbers and their
+        products.
+        """
+
+        primes = iter(self.primes)
+        prime = next(primes)
         factors = {}
         factor = 0
 
-        while j * j <= n:
-            if n % j == 0:
+        while prime * prime <= number:
+            if number % prime == 0:
                 factor += 1
-                n //= j
+                number //= prime
             else:
                 if factor != 0:
-                    factors[j] = factor
+                    factors[prime] = factor
                     factor = 0
-                j = next(p)
+                prime = next(primes)
 
         if factor != 0:
-            factors[j] = factor
-        if n > 1:
-            factors.setdefault(n, 0)
-            factors[n] += 1
+            factors[prime] = factor
+        if number > 1:
+            factors.setdefault(number, 0)
+            factors[number] += 1
 
         return factors
 
-    def proper_divisors(self, n):
-        # https://rosettacode.org/wiki/Proper_divisors#Python:_From_prime_factors
-        factors = self.factorize(n)
+    def proper_divisors(self, number: int) -> Set[int]:
+        """
+        Calculate the proper divisors of `number` using known prime numbers.
+
+        https://rosettacode.org/wiki/Proper_divisors#Python:_From_prime_factors
+        """
+
+        factors = self.factorize(number)
         counts = factors.values()
         multiplicities = product(*(range(count + 1) for count in counts))
         divisors = set()
         for multiplicity in multiplicities:
-            d = 1
-            for factor, m in zip(factors, multiplicity):
-                d *= factor ** m
-            if d != n:
-                divisors.add(d)
+            divisor = 1
+            for factor, power in zip(factors, multiplicity):
+                divisor *= factor ** power
+            if divisor != number:
+                divisors.add(divisor)
 
         return divisors
 
-    def totient(self, d, phis):
-        if d % 2 == 0:
-            phi = 2 * phis[d // 2] if d % 4 == 0 else phis[d // 2]
+    def totient(self, number: int, phis: List[int]) -> int:
+        """
+        Calculate a value of Euler's totient or phi function for input `number`
+        and store the totient in a list `phis`.
+        """
+
+        if number % 2 == 0:
+            if number % 4 == 0:
+                phi = 2 * phis[number // 2]
+            else:
+                phi = phis[number // 2]
         else:
-            i = 0
-            for p in self.primes:
-                if d % p == 0:
-                    n = d // p
-                    phi = phis[n] * ((((n + p - 1) % p) // (p - 1)) + p - 1)
+            step = 0
+            for prime in self.primes:
+                if number % prime == 0:
+                    factor = number // prime
+                    phi = phis[factor] * (
+                        (((factor + prime - 1) % prime) // (prime - 1)) + \
+                        prime - 1
+                    )
                     break
 
-                if i == self.miller * 2 and d in self:
-                    phi = d - 1
+                if step == self.miller * 2 and number in self:
+                    phi = number - 1
                     break
 
-                i += 1
+                step += 1
 
         phis.append(phi)
         return phi
 
-class CoprimeSet(object):
-    def __init__(self, limit):
+class CoprimeSet:
+    """
+    A sequence of pairs of coprime numbers.
+    """
+
+    def __init__(self, limit: int):
         self.limit = limit
         self.children = [(2, 1), (3, 1)]
         self.candidates = deque(self.children)
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Tuple[int, int]]:
         return self
 
-    def __next__(self):
+    def __next__(self) -> Tuple[int, int]:
         while not self.children:
             if not self.candidates:
                 raise StopIteration
 
-            c = self.candidates.popleft()
-            if 2 * c[0] - c[1] + c[0] <= self.limit:
-                self.children.append((2 * c[0] - c[1], c[0]))
-            if 2 * c[0] + c[1] + c[0] <= self.limit:
-                self.children.append((2 * c[0] + c[1], c[0]))
-            if c[0] + 2 * c[1] + c[1] <= self.limit:
-                self.children.append((c[0] + 2 * c[1], c[1]))
+            candidate = self.candidates.popleft()
+            if 2 * candidate[0] - candidate[1] + candidate[0] <= self.limit:
+                self.children.append((2 * candidate[0] - candidate[1],
+                                      candidate[0]))
+            if 2 * candidate[0] + candidate[1] + candidate[0] <= self.limit:
+                self.children.append((2 * candidate[0] + candidate[1],
+                                      candidate[0]))
+            if candidate[0] + 2 * candidate[1] + candidate[1] <= self.limit:
+                self.children.append((candidate[0] + 2 * candidate[1],
+                                      candidate[1]))
 
             self.candidates.extend(self.children)
 

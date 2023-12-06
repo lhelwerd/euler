@@ -1,3 +1,5 @@
-# This is a Python package.
+"""
+Package for Euler modules.
+"""
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
