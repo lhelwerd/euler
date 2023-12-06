@@ -47,11 +47,13 @@ class PrimeSet:
         """
         Retrieve a range of known prime numbers.
         """
+
         return self.primes.irange(start, limit, reverse=reverse)
 
     def extend(self, limit: int) -> None:
         """
-        Increase the sequence of generated primes to go up to `limit` numbers.
+        Increase the sequence of generated primes to go up to `limit`, a number
+        which may or may not be prime itself.
         """
 
         if limit < self.start:

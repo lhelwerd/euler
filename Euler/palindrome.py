@@ -15,7 +15,7 @@ def generate(limit: int) -> Generator[int, None, None]:
 
     for part in range(1, int(limit / 10**int(math.log10(limit) / 2))):
         digits = str(part)
-        if len(digits) < length - 1:
+        if 2 * len(digits) <= length:
             yield int(digits + digits[::-1])
         if len(digits) >= 2:
             yield int(digits + digits[len(digits) - 2::-1])

@@ -2,7 +2,10 @@
 Triangle file reading and operations.
 """
 
-def path(filename: str) -> int:
+from os import PathLike
+from typing import Union
+
+def path(filename: Union[str, PathLike[str]]) -> int:
     """
     Read a triangle file and find the maximum path sum in it.
     """

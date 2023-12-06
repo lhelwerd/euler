@@ -28,8 +28,8 @@ class FormulaSet:
         self.formula = formula
         self.index = index
         self.numbers: SortedSet[float] = SortedSet()
-        self.start = 1
-        self.limit = 1
+        self.start = 0
+        self.limit = 0
         self.maximum = 0.0
         self.extendable = extendable
         self.extend(limit)
@@ -50,8 +50,8 @@ class FormulaSet:
     def __getitem__(self, item: int) -> float:
         ...
     def __getitem__(self, item):
-        if not isinstance(item, slice) and item > self.limit:
-            self.extend(item)
+        if not isinstance(item, slice) and item >= self.limit:
+            self.extend(item + 1)
 
         return self.numbers[item]
 
@@ -65,7 +65,8 @@ class FormulaSet:
 
         self.start = self.limit
         self.limit = limit
-        self.numbers.update(self.formula(np.array(range(self.start, self.limit + 1))))
+        self.numbers.update(self.formula(np.array(range(self.start + 1,
+                                                        self.limit + 1))))
         self.maximum = float(self.formula(self.limit))
 
     def __contains__(self, number: float) -> bool:

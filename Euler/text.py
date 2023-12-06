@@ -2,9 +2,10 @@
 Text file reading.
 """
 
-from typing import Callable, List
+from os import PathLike
+from typing import Callable, List, Union
 
-def read(filename: str,
+def read(filename: Union[str, PathLike[str]],
          reducer: Callable[[List[str], str], None] = \
                  lambda result, word: result.append(word)) -> List[str]:
     """
