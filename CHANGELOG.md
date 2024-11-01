@@ -9,6 +9,8 @@ and we adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.0.3] - 2024-11-01
+
 ### Changed
 
 - Package is now a `pyproject.toml` project instead of using `setup.py`.
@@ -76,6 +78,7 @@ and we adhere to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Initially, a Sieve module was added to find prime numbers, but it was 
   replaced with the prime set module.
 
-[Unreleased]: https://github.com/lhelwerd/euler/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/lhelwerd/euler/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/lhelwerd/euler/releases/tag/v0.0.3
 [0.0.2]: https://github.com/lhelwerd/euler/releases/tag/v0.0.2
 [0.0.1]: https://github.com/lhelwerd/euler/releases/tag/v0.0.1
