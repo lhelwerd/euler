@@ -1,2 +1,2 @@
-numpy==1.26.2
+numpy==1.26.4
 sortedcontainers==2.4.0
