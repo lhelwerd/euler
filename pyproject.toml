@@ -1,0 +1,44 @@
+[project]
+name = "Euler"
+version = "0.0.2"
+description = "Modules implementing algorithms for number theory and other mathematics, with potential use for Project Euler or Advent of Code"
+readme = "README.md"
+authors = [{name = "Leon Helwerda", email = "l.s.helwerda@liacs.leidenuniv.nl"}]
+license = {text = "MIT"}
+requires-python = ">=3.9"
+dependencies = [
+    "numpy==1.26.2",
+    "sortedcontainers==2.4.0"
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Mathematics"
+]
+keywords = [
+    "number theory", "mathematics", "algorithms", "formulas", "primality",
+    "divisors", "palindromes", "roman", "triangles"
+]
+
+[project.urls]
+"Source Code" = "https://github.com/lhelwerd/euler"
+"Issues" = "https://github.com/lhelwerd/euler/issues"
+"Pull Requests" = "https://github.com/lhelwerd/euler/pulls"
+"CI: GitHub Actions" = "https://github.com/lhelwerd/euler/actions"
+"CI: Coveralls" = "https://coveralls.io/github/lhelwerd/euler?branch=main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["Euler"]
+
+[tool.setuptools.package-data]
+"Euler" = ["py.typed"]

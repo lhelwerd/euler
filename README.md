@@ -9,12 +9,11 @@ methods. Potential applications that these modules could be used for are
 [Project Euler](https://projecteuler.net/) problems and [Advent of 
 Code](https://adventofcode.com/) puzzles.
 
-The modules are written for Python 3.8+ and for PyPy 3.10+. Support for older 
-versions is dropped in version 0.0.2. The oldest versions of the modules 
-support running on older versions as well, which are from back when 
-[PyPy](https://www.pypy.org/) was only starting to support Python 3 code. 
-Detailed information on changes for each version is found in the 
-[RELEASE_NOTES.md](release notes) file.
+The modules are written for Python 3.9+ and for PyPy 3.10+. Support for 
+versions before 3.8 is dropped in version 0.0.2 and support for 3.8 is dropped 
+in version 0.0.3. The modules support running on [PyPy](https://www.pypy.org/) 
+(currently those based on Python 3.10) as well. Detailed information on changes 
+for each version is found in the [changelog](CHANGELOG.md) file.
 
 ## Installation
 
@@ -23,7 +22,9 @@ Source releases of versions are available from
 
 When using the source release or if this repository is cloned, then 
 installation of the module is possible with `pip install` followed by either 
-the release zip/tarball or the current directory.
+the release zip/tarball or the current directory. `make install` installs from 
+the current directory. We recommend using virtual environments to keep your 
+dependencies separate from global installation.
 
 To install a development version of the modules as a dependency, use 
 `git+https://github.com/lhelwerd/euler.git@main#egg=Euler` in 
@@ -34,19 +35,18 @@ inspiration.
 
 ## Testing
 
-In the repository, run unit tests using `python -m unittest discover -s tests`. 
-Additionally, obtain coverage information by first installing dependencies with 
-`pip install coverage`. Then, use `coverage run -m unittest discover -s tests`.
-Finally, use `coverage report` or `coverage html` to receive output.
+In the repository, run unit tests using `make test`. Additionally, obtain 
+coverage information by first installing dependencies with `make setup_test`. 
+Then, use `make coverage` to perform the unit tests and receive output in the 
+form of a textual report and XML report. Finally, you could use `coverage html` 
+to receive a HTML report.
 
-Typing checks are also possible by first installing typing dependencies using 
-`pip install -r typing-requirements.txt` and then running the type checker with 
-`mypy Euler --html-report mypy-report --show-traceback`.
-
-Style checks are done by installing with `pip install pylint` and then using 
-`pylint Euler` for an aggregate report.
+Typing and style checks are also possible by first installing dependencies 
+using `make setup_analysis`. Then, use `make mypy` to run the type checker and 
+receive HTML and XML reports. Style checks are done by using `make pylint` for 
+an aggregate report output.
 
 ## License
 
-The Euler module is licensed under the MIT License. See the [LICENSE](license) 
+The Euler module is licensed under the MIT License. See the [license](LICENSE) 
 file for more information.
