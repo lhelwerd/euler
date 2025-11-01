@@ -1,6 +1,6 @@
 [project]
 name = "Euler"
-version = "0.0.3"
+version = "0.0.4"
 description = "Modules implementing algorithms for number theory and other mathematics, with potential use for Project Euler or Advent of Code"
 readme = "README.md"
 authors = [{name = "Leon Helwerda", email = "l.s.helwerda@liacs.leidenuniv.nl"}]
