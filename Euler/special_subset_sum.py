@@ -3,7 +3,8 @@ Special subset sum set properties.
 """
 
 import itertools
-from typing import Collection
+from collections.abc import Collection
+
 
 def special_subset_sum_set(candidate: Collection[int]) -> bool:
     """

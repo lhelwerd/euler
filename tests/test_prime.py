@@ -3,13 +3,19 @@ Unit tests for finding prime numbers using various algorithms.
 """
 
 import unittest
-from Euler.prime import PrimeSet, CoprimeSet
+from typing import final
+from typing_extensions import override
 
+from Euler.prime import CoprimeSet, PrimeSet
+
+
+@final
 class PrimeTest(unittest.TestCase):
     """
     Tests for the prime module's PrimeSet class.
     """
 
+    @override
     def setUp(self) -> None:
         self.prime = PrimeSet(10)
 
@@ -107,7 +113,7 @@ class PrimeTest(unittest.TestCase):
         fixed.refresh_limit()
         self.assertEqual(fixed.limit, 11)
 
-    def test_factorize(self):
+    def test_factorize(self) -> None:
         """
         Test the prime-based factorization.
         """
@@ -145,16 +151,19 @@ class PrimeTest(unittest.TestCase):
 
         limited = PrimeSet(0, extendable=False)
         with self.assertRaises(ValueError):
-            limited.totient(11, phis)
+            self.assertIsNone(limited.totient(11, phis))
 
         miller = PrimeSet(10, extendable=False, miller=1)
         self.assertEqual(miller.totient(11, phis), 10)
 
+
+@final
 class CoprimeTest(unittest.TestCase):
     """
     Tests for the prime module's CoprimeSet class.
     """
 
+    @override
     def setUp(self) -> None:
         self.coprime = CoprimeSet(5)
 
@@ -165,9 +174,10 @@ class CoprimeTest(unittest.TestCase):
 
         self.assertEqual(list(self.coprime), [(2, 1), (3, 1), (3, 2), (4, 1)])
         longer = CoprimeSet(7)
-        self.assertEqual(list(longer), [
-            (2, 1), (3, 1), (3, 2), (5, 2), (4, 1), (5, 1), (4, 3), (6, 1)
-        ])
+        self.assertEqual(
+            list(longer),
+            [(2, 1), (3, 1), (3, 2), (5, 2), (4, 1), (5, 1), (4, 3), (6, 1)],
+        )
 
     def test_next(self) -> None:
         """
@@ -179,4 +189,4 @@ class CoprimeTest(unittest.TestCase):
         self.assertEqual(next(self.coprime), (3, 2))
         self.assertEqual(next(self.coprime), (4, 1))
         with self.assertRaises(StopIteration):
-            next(self.coprime)
+            self.assertIsNotNone(next(self.coprime))

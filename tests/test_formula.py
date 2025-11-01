@@ -3,15 +3,25 @@ Unit tests for generating sequences of numbers by a formula.
 """
 
 import unittest
-from Euler.formula import FormulaSet
+from typing import cast, final
+from typing_extensions import override
 
+from Euler.formula import Formula, FormulaSet
+
+
+@final
 class FormulaTest(unittest.TestCase):
     """
     Tests for the formula module.
     """
 
+    @override
     def setUp(self) -> None:
-        self.formula = FormulaSet(lambda n: n + 1, lambda num: int(num) - 1, 5)
+        self.formula = FormulaSet(
+            cast(Formula, lambda n: n + 1),
+            lambda num: int(num) - 1,
+            5,
+        )
 
     def test_iter(self) -> None:
         """
@@ -66,7 +76,9 @@ class FormulaTest(unittest.TestCase):
         self.assertIn(7.0, self.formula)
         self.assertIn(12, self.formula)
 
-        index = FormulaSet(lambda n: n * 2.0, lambda num: num / 2, 5)
+        index = FormulaSet(
+            cast(Formula, lambda n: n * 2.0), lambda num: num / 2, 5
+        )
         self.assertIn(4.0, index)
         self.assertIn(16.0, index)
         self.assertNotIn(17.0, index)

@@ -3,7 +3,9 @@ Module for palindromes.
 """
 
 import math
-from typing import Generator
+from collections.abc import Generator
+from typing import cast
+
 
 def generate(limit: int) -> Generator[int, None, None]:
     """
@@ -13,14 +15,17 @@ def generate(limit: int) -> Generator[int, None, None]:
 
     length = int(math.log10(limit))
 
-    for part in range(1, int(limit / 10**int(math.log10(limit) / 2))):
+    for part in range(
+        1, int(limit / cast(int, 10 ** int(math.log10(limit) / 2)))
+    ):
         digits = str(part)
         if 2 * len(digits) <= length:
             yield int(digits + digits[::-1])
         if len(digits) >= 2:
-            yield int(digits + digits[len(digits) - 2::-1])
+            yield int(digits + digits[len(digits) - 2 :: -1])
         else:
             yield part
+
 
 def is_palindrome(digits: str) -> bool:
     """

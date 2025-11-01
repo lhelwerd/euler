@@ -3,7 +3,9 @@ Unit tests for text file reading.
 """
 
 import unittest
+
 from Euler.text import read
+
 
 class TextTest(unittest.TestCase):
     """
@@ -15,4 +17,4 @@ class TextTest(unittest.TestCase):
         Test the large file reader.
         """
 
-        self.assertEqual(len(read('tests/text.txt')), 200)
+        self.assertEqual(len(read("tests/text.txt")), 200)

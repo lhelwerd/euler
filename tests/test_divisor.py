@@ -5,6 +5,7 @@ Unit tests for calculations divisors of numbers.
 import unittest
 from Euler.divisor import proper_divisors
 
+
 class DivisorTest(unittest.TestCase):
     """
     Tests for the divisor module.
