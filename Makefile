@@ -14,10 +14,10 @@ TESTS=tests
 TEST=-m unittest discover -s $(TESTS)
 
 .PHONY: all
-all: coverage mypy pylint
+all: coverage mypy pylint ruff pyright
 
 .PHONY: release
-release: test mypy pylint clean build tag push upload
+release: test mypy pylint ruff pyright clean build tag push
 
 .PHONY: setup
 setup:
@@ -72,11 +72,49 @@ coverage:
 build:
 	python -m build
 
+.PHONY: get_version
+get_version: get_toml_version get_init_version get_sonar_version get_changelog_version
+	if [ "${TOML_VERSION}" != "${INIT_VERSION}" ] || [ "${TOML_VERSION}" != "${SONAR_VERSION}" ] || [ "${TOML_VERSION}" != "${CHANGELOG_VERSION}" ]; then \
+		echo "Version mismatch"; \
+		exit 1; \
+	fi
+	$(eval VERSION=$(TOML_VERSION))
+
+.PHONY: get_init_version
+get_init_version:
+	$(eval INIT_VERSION=v$(shell grep __version__ $(SOURCES)/__init__.py | sed -E "s/__version__ = .([0-9.]+)./\\1/"))
+	$(info Version in __init__.py: $(INIT_VERSION))
+
+.PHONY: get_toml_version
+get_toml_version:
+	$(eval TOML_VERSION=v$(shell grep "^version" pyproject.toml | sed -E "s/version = .([0-9.]+)./\\1/"))
+	$(info Version in pyproject.toml: $(TOML_VERSION))
+
+.PHONY: get_sonar_version
+get_sonar_version:
+	$(eval SONAR_VERSION=v$(shell grep projectVersion sonar-project.properties | cut -d= -f2))
+	$(info Version in sonar-project.properties: $(SONAR_VERSION))
+
+.PHONY: get_changelog_version
+get_changelog_version:
+	$(eval RAW_CHANGELOG_VERSION=$(shell grep "^## \[[0-9]\+\.[0-9]\+\.[0-9]\+\]" CHANGELOG.md | head -n 1 | sed -E "s/## \[([0-9]+\.[0-9]+\.[0-9]+)\].*/\1/"))
+	$(eval ESCAPED_VERSION=$(subst .,\.,$(RAW_CHANGELOG_VERSION)))
+	$(eval CHANGELOG_VERSION=v$(RAW_CHANGELOG_VERSION))
+	$(info Version in CHANGELOG.md: $(CHANGELOG_VERSION))
+
+.PHONY: tag
+tag: get_version
+	git tag $(VERSION)
+
+.PHONY: push
+push: get_version
+	git push origin $(VERSION)
+
 .PHONY: clean
 clean:
 	# Unit tests and coverage
 	$(RM) .coverage htmlcov/ test-reports/
-	# Typing coverage and Pylint
-	$(RM) .mypy_cache mypy-report/ pylint-report.txt
+	# Typing coverage and code style formatting
+	$(RM) .mypy_cache mypy-report/ pylint-report.txt ruff-report.json
 	# Pip and distribution
 	$(RM) src/ build/ dist/ Euler.egg-info/
