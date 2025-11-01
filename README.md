@@ -2,6 +2,7 @@
 
 [![coverage](https://github.com/lhelwerd/euler/actions/workflows/coverage.yml/badge.svg)](https://github.com/lhelwerd/euler/actions/workflows/coverage.yml)
 [![Coverage Status](https://coveralls.io/repos/github/lhelwerd/euler/badge.svg?branch=main)](https://coveralls.io/github/lhelwerd/euler?branch=main)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=lhelwerd_euler&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=lhelwerd_euler)
 
 This repository contains some Python modules that implement algorithms for 
 number theory and other fields of mathematics, but also some file processing 
