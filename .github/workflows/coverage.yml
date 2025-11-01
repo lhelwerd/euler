@@ -38,6 +38,11 @@ jobs:
           parallel: true
           format: cobertura
           files: test-reports/cobertura.xml
+      - name: Archive coverage results
+        uses: actions/upload-artifact@v5.0.0
+        with:
+          name: "coverage-${{ matrix.python }}"
+          path: test-reports
     strategy:
       matrix:
         python:
@@ -55,3 +60,59 @@ jobs:
         with:
           github-token: "${{ secrets.GITHUB_TOKEN }}"
           parallel-finished: true
+      - name: Checkout
+        uses: actions/checkout@v5.0.0
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6.0.0
+        with:
+          python-version: "${{ matrix.python }}"
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7.1.2
+        with:
+          version: "0.9.7"
+      - name: Install dependencies for analysis
+        run: |
+          uv venv .venv
+          make setup
+          make setup_analysis
+      - name: Typing analysis and coverage (mypy)
+        if: "${{ always() }}"
+        run: |
+          source .venv/bin/activate
+          make mypy
+      - name: Typing analysis (basedpyright)
+        if: "${{ always() }}"
+        run: |
+          source .venv/bin/activate
+          make pyright
+      - name: Code style formatting (pylint)
+        if: "${{ always() }}"
+        shell: bash
+        run: |
+          source .venv/bin/activate
+          make pylint | tee pylint-report.txt
+      - name: Code style formatting (ruff)
+        if: "${{ always() }}"
+        shell: bash
+        run: |
+          source .venv/bin/activate
+          set +e
+          make ruff
+          if [ $? -ne 0 ]; then make ruff RUFF="ruff check --output-format=json --output-file=ruff-report.json"; make ruff RUFF="ruff check --output-format=github"; fi
+      - name: Collect coverage results
+        if: "${{ always() }}"
+        uses: actions/download-artifact@v6.0.0
+        with:
+          pattern: coverage-*
+          path: test-reports
+          merge-multiple: true
+      - name: SonarQube scan
+        if: "${{ always() }}"
+        uses: SonarSource/sonarqube-scan-action@v6.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    strategy:
+      matrix:
+        python:
+          - '3.13.9'

@@ -1,10 +1,20 @@
 *~
 __pycache__
 *.pyc
+
+# Unit tests and coverage
 .coverage
+htmlcov/
+test-reports/
+
+# Typing coverage and formatting reports
+.mypy_cache
+mypy-report/
+pylint-report.txt
+ruff-report.json
+
+# Distribution
 build/
 dist/
-mypy-report/
-test-reports/
 *.egg-info
 *.egg
