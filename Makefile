@@ -1,10 +1,17 @@
 COVERAGE=coverage
 MYPY=mypy
-PIP=python -m pip
+ifeq (,$(shell which uv))
+	PIP=python -m pip
+else
+	PIP=uv pip
+endif
 PYLINT=pylint
+PYRIGHT=basedpyright
+RUFF=ruff check
 RM=rm -rf
 SOURCES=Euler
-TEST=-m unittest discover -s tests
+TESTS=tests
+TEST=-m unittest discover -s $(TESTS)
 
 .PHONY: all
 all: coverage mypy pylint
@@ -14,35 +21,42 @@ release: test mypy pylint clean build tag push upload
 
 .PHONY: setup
 setup:
-	$(PIP) install -r requirements.txt
+	$(PIP) install .
 
 .PHONY: setup_release
 setup_release:
-	$(PIP) install -r requirements-release.txt
+	$(PIP) install , --group release
 
 .PHONY: setup_analysis
 setup_analysis:
-	$(PIP) install -r requirements-analysis.txt
+	$(PIP) install . --group analysis
 
 .PHONY: setup_test
 setup_test:
-	$(PIP) install -r requirements-test.txt
+	$(PIP) install . --group test
 
 .PHONY: install
-install:
-	$(PIP) install .
+install: setup
 
 .PHONY: pylint
 pylint:
-	$(PYLINT) $(SOURCES)
+	$(PYLINT) $(SOURCES) $(TESTS)
+
+.PHONY: ruff
+ruff:
+	$(RUFF) $(SOURCES) $(TESTS)
 
 .PHONY: mypy
 mypy:
-	$(MYPY) $(SOURCES) \
+	$(MYPY) $(SOURCES) $(TESTS) \
 		--html-report mypy-report \
 		--cobertura-xml-report mypy-report \
 		--junit-xml mypy-report/TEST-junit.xml \
 		--no-incremental --show-traceback
+
+.PHONY: pyright
+pyright:
+	$(PYRIGHT) $(SOURCES) $(TESTS)
 
 .PHONY: test
 test:
