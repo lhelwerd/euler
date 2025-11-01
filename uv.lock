@@ -162,6 +162,7 @@ source = { editable = "." }
 dependencies = [
     { name = "numpy" },
     { name = "sortedcontainers" },
+    { name = "typing-extensions" },
 ]
 
 [package.dev-dependencies]
@@ -186,6 +187,7 @@ test = [
 requires-dist = [
     { name = "numpy", specifier = "==2.2.6" },
     { name = "sortedcontainers", specifier = "==2.4.0" },
+    { name = "typing-extensions", specifier = ">=4.15.0" },
 ]
 
 [package.metadata.requires-dev]

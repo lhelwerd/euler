@@ -3,7 +3,9 @@ Unit tests for modular arithmetic.
 """
 
 import unittest
+
 from Euler.modulo import inverse
+
 
 class ModuloTest(unittest.TestCase):
     """

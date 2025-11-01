@@ -3,21 +3,26 @@ Module for finding prime numbers using various algorithms.
 """
 
 from collections import deque
+from collections.abc import Iterator, Sequence
 from itertools import chain, product
-from typing import overload, Dict, Iterator, List, Sequence, Set, Tuple
+from typing import cast, overload
+
 from sortedcontainers import SortedSet
+
 
 class PrimeSet:
     """
     Collection of prime numbers that should have no proper divisors except 1.
     """
 
-    def __init__(self, limit: int, extendable: bool = True, miller: int = 0):
-        self.primes = SortedSet([2])
-        self.start = 3
-        self.limit = 3
-        self.extendable = extendable
-        self.miller = miller
+    def __init__(
+        self, limit: int, extendable: bool = True, miller: int = 0
+    ) -> None:
+        self.primes: SortedSet[int] = SortedSet([2])
+        self.start: int = 3
+        self.limit: int = 3
+        self.extendable: bool = extendable
+        self.miller: int = miller
         self.extend(limit)
 
     def __iter__(self) -> Iterator[int]:
@@ -30,18 +35,19 @@ class PrimeSet:
         return len(self.primes)
 
     @overload
-    def __getitem__(self, item: slice) -> Sequence[int]: ... # pragma: no cover
+    def __getitem__(self, item: slice) -> Sequence[int]: ...  # pragma: no cover
     @overload
-    def __getitem__(self, item: int) -> int: ... # pragma: no cover
-    def __getitem__(self, item):
+    def __getitem__(self, item: int) -> int: ...  # pragma: no cover
+    def __getitem__(self, item: slice | int) -> Sequence[int] | int:
         return self.primes[item]
 
     @staticmethod
-    def _odd_range(start: int, limit: int) -> 'range':
+    def _odd_range(start: int, limit: int) -> "range":
         return range(2 * (start // 2) + 1, limit, 2)
 
-    def range(self, start: int, limit: int, reverse: bool = False) \
-            -> Iterator[int]:
+    def range(
+        self, start: int, limit: int, reverse: bool = False
+    ) -> Iterator[int]:
         """
         Retrieve a range of known prime numbers.
         """
@@ -57,18 +63,19 @@ class PrimeSet:
         if limit < self.start:
             return
 
-        maxbase = int(limit**0.5) + 1
+        maxbase = int(cast(float, limit**0.5)) + 1
         self.extend(maxbase)
         self.limit = limit
         # All odd numbers are candidate primes
         self.start = self.primes[-1] + 1
-        self.primes.update(self._odd_range(self.start, self.limit + 1))
+        _ = self.primes.update(self._odd_range(self.start, self.limit + 1))
 
         # Remove non-primes based on earlier found numbers
         for prime in self.range(3, maxbase):
             start_prime = self.start + prime - (self.start % prime)
-            self.primes.difference_update(range(start_prime, self.limit + 1,
-                                                prime))
+            _ = self.primes.difference_update(
+                range(start_prime, self.limit + 1, prime)
+            )
 
     def __contains__(self, number: int) -> bool:
         if self.extendable or number <= self.limit:
@@ -90,8 +97,9 @@ class PrimeSet:
         # Find if there are any proper divisors of n (excluding 1 and n) by
         # only using the prime numbers we know and any odd numbers over it that
         # may be a divisor as well (up to n/2).
-        for divisor in chain(self.primes,
-                             self._odd_range(self.limit, number // 2)):
+        for divisor in chain(
+            self.primes, self._odd_range(self.limit, number // 2)
+        ):
             if number % divisor == 0:
                 return False
 
@@ -139,7 +147,7 @@ class PrimeSet:
 
         self.limit = max(self.primes)
 
-    def factorize(self, number: int) -> Dict[int, int]:
+    def factorize(self, number: int) -> dict[int, int]:
         """
         Factorize the number `n` into a dictionary of prime numbers and their
         products.
@@ -147,7 +155,7 @@ class PrimeSet:
 
         primes = iter(self.primes)
         prime = next(primes)
-        factors = {}
+        factors: dict[int, int] = {}
         factor = 0
 
         while prime * prime <= number:
@@ -163,12 +171,12 @@ class PrimeSet:
         if factor != 0:
             factors[prime] = factor
         if number > 1:
-            factors.setdefault(number, 0)
+            _ = factors.setdefault(number, 0)
             factors[number] += 1
 
         return factors
 
-    def proper_divisors(self, number: int) -> Set[int]:
+    def proper_divisors(self, number: int) -> set[int]:
         """
         Calculate the proper divisors of `number` using known prime numbers.
 
@@ -178,17 +186,17 @@ class PrimeSet:
         factors = self.factorize(number)
         counts = factors.values()
         multiplicities = product(*(range(count + 1) for count in counts))
-        divisors = set()
+        divisors: set[int] = set()
         for multiplicity in multiplicities:
             divisor = 1
-            for factor, power in zip(factors, multiplicity):
-                divisor *= factor ** power
+            for factor, power in zip(factors, multiplicity, strict=True):
+                divisor *= cast(int, factor**power)
             if divisor != number:
                 divisors.add(divisor)
 
         return divisors
 
-    def totient(self, number: int, phis: List[int]) -> int:
+    def totient(self, number: int, phis: list[int]) -> int:
         """
         Calculate a value of Euler's totient or phi function for input `number`
         and store the totient in a list `phis`.
@@ -204,8 +212,9 @@ class PrimeSet:
                 if number % prime == 0:
                     factor = number // prime
                     phi = phis[factor] * (
-                        (((factor + prime - 1) % prime) // (prime - 1)) + \
-                        prime - 1
+                        (((factor + prime - 1) % prime) // (prime - 1))
+                        + prime
+                        - 1
                     )
                     break
 
@@ -213,39 +222,43 @@ class PrimeSet:
                     phi = number - 1
                     break
             else:
-                raise ValueError('Exhausted primes')
+                raise ValueError("Exhausted primes")
 
         phis.append(phi)
         return phi
+
 
 class CoprimeSet:
     """
     A sequence of pairs of coprime numbers.
     """
 
-    def __init__(self, limit: int):
-        self.limit = limit
-        self.children = [(2, 1), (3, 1)]
-        self.candidates = deque(self.children)
+    def __init__(self, limit: int) -> None:
+        self.limit: int = limit
+        self.children: list[tuple[int, int]] = [(2, 1), (3, 1)]
+        self.candidates: deque[tuple[int, int]] = deque(self.children)
 
-    def __iter__(self) -> Iterator[Tuple[int, int]]:
+    def __iter__(self) -> Iterator[tuple[int, int]]:
         return self
 
-    def __next__(self) -> Tuple[int, int]:
+    def __next__(self) -> tuple[int, int]:
         while not self.children:
             if not self.candidates:
                 raise StopIteration
 
             candidate = self.candidates.popleft()
             if 2 * candidate[0] - candidate[1] + candidate[0] <= self.limit:
-                self.children.append((2 * candidate[0] - candidate[1],
-                                      candidate[0]))
+                self.children.append(
+                    (2 * candidate[0] - candidate[1], candidate[0])
+                )
             if 2 * candidate[0] + candidate[1] + candidate[0] <= self.limit:
-                self.children.append((2 * candidate[0] + candidate[1],
-                                      candidate[0]))
+                self.children.append(
+                    (2 * candidate[0] + candidate[1], candidate[0])
+                )
             if candidate[0] + 2 * candidate[1] + candidate[1] <= self.limit:
-                self.children.append((candidate[0] + 2 * candidate[1],
-                                      candidate[1]))
+                self.children.append(
+                    (candidate[0] + 2 * candidate[1], candidate[1])
+                )
 
             self.candidates.extend(self.children)
 

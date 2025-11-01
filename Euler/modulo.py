@@ -2,6 +2,7 @@
 Module for modular arithmetic.
 """
 
+
 def inverse(value: int, modulo: int) -> int:
     """
     Calculate the multiplicative modular inverse `t` of value `a`, modulo `n`.
@@ -18,8 +19,10 @@ def inverse(value: int, modulo: int) -> int:
     while new_remainder != 0:
         quotient = remainder // new_remainder
         inverse_t, new_inverse = new_inverse, inverse_t - quotient * new_inverse
-        remainder, new_remainder = new_remainder, \
-            remainder - quotient * new_remainder
+        remainder, new_remainder = (
+            new_remainder,
+            remainder - quotient * new_remainder,
+        )
 
     if remainder > 1:
         return 0

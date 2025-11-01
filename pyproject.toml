@@ -9,6 +9,7 @@ requires-python = ">=3.10,<3.15"
 dependencies = [
     "numpy==2.2.6",
     "sortedcontainers==2.4.0",
+    "typing-extensions==4.15.0",
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -66,18 +67,23 @@ branch = true
 
 [tool.basedpyright]
 pythonVersion = "3.10"
-typeCheckingMode = "off"
+typeCheckingMode = "recommended"
+
+[[tool.basedpyright.executionEnvironments]]
+root = "tests"
+reportUninitializedInstanceVariable = "none" # Often in setUp
+reportUnknownLambdaType = "none"
 
 [tool.ruff]
 target-version = "py310"
-line-length = 81 # 80
+line-length = 80
 
 [tool.ruff.lint]
 select = [
-    #"ANN", # flake8-annotations
+    "ANN", # flake8-annotations
     "S", # flake8-bandit
     "BLE", # flake8-blind-except
-    #"B", # flake8-bugbear
+    "B", # flake8-bugbear
     "A", # flake8-builtins
     "C4", # flake8-comprehensions
     "FIX", # flake8-fixme
@@ -89,16 +95,16 @@ select = [
     "PYI", # flake8-pyi
     "RET", # flake8-return
     "SLF", # flake8-self
-    #"SIM", # flake8-simplify
-    #"PTH", # flake8-use-pathlib
+    "SIM", # flake8-simplify
+    "PTH", # flake8-use-pathlib
     "FLY", # flynt
     "C90", # mccabe
     "N", # pep8-naming
     "PERF", # Perflint
     "E", "W", # pycodestyle
-    #"D1", # pydocstyle undocumented
+    "D1", # pydocstyle undocumented
     "F", # Pyflakes
-    #"UP", # pyupgrade
+    "UP", # pyupgrade
     "FURB", # refurb
     "RUF", # ruff
     "TRY", # tryceratops

@@ -3,7 +3,9 @@ Unit tests for special subset sum set properties.
 """
 
 import unittest
+
 from Euler.special_subset_sum import special_subset_sum_set
+
 
 class SpecialSubsetSumTest(unittest.TestCase):
     """

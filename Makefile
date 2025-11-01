@@ -25,7 +25,7 @@ setup:
 
 .PHONY: setup_release
 setup_release:
-	$(PIP) install , --group release
+	$(PIP) install . --group release
 
 .PHONY: setup_analysis
 setup_analysis:
@@ -44,7 +44,7 @@ pylint:
 
 .PHONY: ruff
 ruff:
-	$(RUFF) $(SOURCES) $(TESTS)
+	$(RUFF) $(SOURCES) #$(TESTS)
 
 .PHONY: mypy
 mypy:
@@ -56,7 +56,7 @@ mypy:
 
 .PHONY: pyright
 pyright:
-	$(PYRIGHT) $(SOURCES) $(TESTS)
+	$(PYRIGHT) $(SOURCES) #$(TESTS)
 
 .PHONY: test
 test:

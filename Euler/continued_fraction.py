@@ -2,10 +2,11 @@
 Module for calculations involving continued fractions.
 """
 
+from collections.abc import Generator
 from decimal import Decimal
-from typing import Generator, Set, Tuple, Union
 
-def expand_sqrt(number: int) -> Generator[Tuple[Decimal, Decimal], None, None]:
+
+def expand_sqrt(number: int) -> Generator[tuple[Decimal, Decimal], None, None]:
     """
     Generate the unique parameters of the continued fraction expansion of
     the square root of `number`, stopping when an existing parameter is found.
@@ -13,11 +14,11 @@ def expand_sqrt(number: int) -> Generator[Tuple[Decimal, Decimal], None, None]:
 
     square_root = Decimal(number).sqrt()
     if square_root % 1 != 0:
-        fraction: Union[int, Decimal] = int(square_root)
-        expansions: Set[Tuple[Decimal, Decimal]] = set()
+        fraction: int | Decimal = int(square_root)
+        expansions: set[tuple[Decimal, Decimal]] = set()
         # Numerator/denominator start values like sqrt(2) expansion
-        numerator = Decimal('0')
-        denominator = Decimal('1')
+        numerator = Decimal("0")
+        denominator = Decimal("1")
         while (numerator, denominator) not in expansions:
             # Not yet found, so add to the known expansions
             expansions.add((numerator, denominator))
@@ -32,5 +33,5 @@ def expand_sqrt(number: int) -> Generator[Tuple[Decimal, Decimal], None, None]:
             #  --> e.g. for s = sqrt(23) we get
             #  v1 = int((4+4...)/7) * 7 - 4 = 3, w1 = (23 - 3**2) / 7 = 2
             numerator = fraction * denominator - numerator
-            denominator = (number - numerator ** 2) // denominator
+            denominator = (number - numerator**2) // denominator
             fraction = (numerator + square_root) // denominator
